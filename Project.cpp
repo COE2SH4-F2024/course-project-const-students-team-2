@@ -1,6 +1,8 @@
 #include <iostream>
 #include "MacUILib.h"
 #include "objPos.h"
+#include "Player.h"
+#include "GameMechs.h"
 
 using namespace std;
 
@@ -10,6 +12,9 @@ using namespace std;
 #define WIDTH 20
 
 bool exitFlag;
+
+Player* player;
+GameMechs* testMechs;
 
 void Initialize(void);
 void GetInput(void);
@@ -45,6 +50,9 @@ void Initialize(void)
 
     exitFlag = false;
 
+    testMechs = new GameMechs();
+    player = new Player(testMechs);
+
 }
 
 void GetInput(void)
@@ -54,12 +62,15 @@ void GetInput(void)
 
 void RunLogic(void)
 {
-    
+    player->updatePlayerDir();
+    player->movePlayer();
 }
 
 void DrawScreen(void)
 {
     int row,column = 0;
+    int xpos = player->getPlayerPos().pos->x;
+    int ypos = player->getPlayerPos().pos->y;
     MacUILib_clearScreen();    
     MacUILib_printf("####################\n");
     for (row = 1; row<HEIGHT-1; row++){
@@ -70,9 +81,10 @@ void DrawScreen(void)
             else if (column == 0){
                 MacUILib_printf("#");
             }
-            /*else if (player.x == column && player.y == row){
-                MacUILib_printf("%c", player.symbol);
+            else if (xpos == column && ypos == row){
+                MacUILib_printf("%c", player->getPlayerPos().getSymbol());
             }
+            /*
             else{
                 for (i = 0; i<5; i++){
                     if(itemBin[i].x == column && itemBin[i].y == row){
