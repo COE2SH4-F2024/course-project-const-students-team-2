@@ -1,15 +1,16 @@
 #include "Player.h"
 
 Player::Player(){
-    mainGameMechsRef = &GameMechs(); // Add default game mechs constructor
+    GameMechs gm = GameMechs();
+    mainGameMechsRef = &gm;
     myDir = STOP;
-    playerPos.setObjPos(10, 5, '*');
+    playerPos.setObjPos(mainGameMechsRef->getBoardSizeX()/2, mainGameMechsRef->getBoardSizeY()/2, '*');
 }
 Player::Player(GameMechs* thisGMRef)
 {
     mainGameMechsRef = thisGMRef;
     myDir = STOP;
-    playerPos.setObjPos(10, 5, '*');
+    playerPos.setObjPos(mainGameMechsRef->getBoardSizeX()/2, mainGameMechsRef->getBoardSizeY()/2, '*');
 
     // more actions to be included
 }
@@ -53,6 +54,10 @@ void Player::updatePlayerDir()
         // PPA3 input processing logic      
     char input = mainGameMechsRef->getInput();
 
+    if (input >= 'a' && input <= 'z'){
+        input -= 32;
+    }
+
     if (input == 'W' && myDir != DOWN){
         myDir = UP;
     }
@@ -64,6 +69,9 @@ void Player::updatePlayerDir()
     }
     else if (input == 'D' && myDir != LEFT){
         myDir = RIGHT;
+    }
+    else if (input == ' '){
+        mainGameMechsRef->setExitTrue();
     }
 }
 
