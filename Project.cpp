@@ -57,13 +57,23 @@ void Initialize(void)
 
 void GetInput(void)
 {
-   
+   testMechs->getInput();
 }
 
 void RunLogic(void)
 {
-    player->updatePlayerDir();
-    player->movePlayer();
+    if (testMechs->getInput()==' ')
+    {
+        testMechs->setExitTrue();
+        testMechs->clearInput();
+    }
+    else
+    {
+        player->updatePlayerDir();
+        player->movePlayer();
+    }
+    
+    
 }
 
 void DrawScreen(void)

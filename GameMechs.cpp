@@ -71,10 +71,7 @@ int GameMechs::getBoardSizeY() const
 
 void GameMechs::setExitTrue()
 {
-    if (input == ' ')
-    {
-        exitFlag = true;
-    }
+    exitFlag = true;
 }
 
 void GameMechs::setLoseFlag()
