@@ -11,7 +11,7 @@ using namespace std;
 #define HEIGHT 10
 #define WIDTH 20
 
-bool exitFlag;
+
 
 Player* player;
 GameMechs* testMechs;
@@ -30,7 +30,7 @@ int main(void)
 
     Initialize();
 
-    while(exitFlag == false)  
+    while(testMechs->getExitFlagStatus() == false)  
     {
         GetInput();
         RunLogic();
@@ -48,9 +48,9 @@ void Initialize(void)
     MacUILib_init();
     MacUILib_clearScreen();
 
-    exitFlag = false;
+    
 
-    testMechs = new GameMechs();
+    testMechs = new GameMechs(); //creating gamemechs on the heap
     player = new Player(testMechs);
 
 }
@@ -114,7 +114,11 @@ void LoopDelay(void)
 
 void CleanUp(void)
 {
-    MacUILib_clearScreen();    
+    MacUILib_clearScreen();   
+    delete testMechs; //deleteing gamemechs 
+    delete player;
 
     MacUILib_uninit();
+    
+   
 }
