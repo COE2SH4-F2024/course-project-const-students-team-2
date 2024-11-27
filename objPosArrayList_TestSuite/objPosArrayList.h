@@ -15,6 +15,8 @@ class objPosArrayList
     public:
         objPosArrayList();
         ~objPosArrayList();
+        objPosArrayList(const objPosArrayList &list);
+        objPosArrayList& operator= (const objPosArrayList &list);
 
         int getSize() const;
         void insertHead(objPos thisPos);

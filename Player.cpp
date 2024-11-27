@@ -1,6 +1,10 @@
 #include "Player.h"
 
-
+Player::Player(){
+    mainGameMechsRef = &GameMechs(); // Add default game mechs constructor
+    myDir = STOP;
+    playerPos.setObjPos(10, 5, '*');
+}
 Player::Player(GameMechs* thisGMRef)
 {
     mainGameMechsRef = thisGMRef;
@@ -10,11 +14,30 @@ Player::Player(GameMechs* thisGMRef)
     // more actions to be included
 }
 
+Player::Player(const Player &p){
+    // Copy Assignment
+    
+    mainGameMechsRef = p.mainGameMechsRef;
+    myDir = p.myDir;
+    playerPos.setObjPos(p.playerPos);
+}
+
+Player& Player::operator= (const Player &p)
+{
+    // Copy Operator
+	if (this != &p){
+        
+        this->mainGameMechsRef = p.mainGameMechsRef;
+        this->myDir = p.myDir;
+        this->playerPos.setObjPos(p.playerPos);
+	}
+	return *this;
+}
 
 Player::~Player()
 {
     // delete any heap members here
-    //delete[] playerPos;
+    delete[] &playerPos;
 
 
 }
