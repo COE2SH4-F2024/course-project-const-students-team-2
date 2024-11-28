@@ -8,13 +8,11 @@ using namespace std;
 
 #define DELAY_CONST 100000
 
-#define HEIGHT 10
-#define WIDTH 20
-
 
 
 Player* player;
-GameMechs* testMechs;
+GameMechs* gameMechs;
+
 
 void Initialize(void);
 void GetInput(void);
@@ -30,7 +28,7 @@ int main(void)
 
     Initialize();
 
-    while(testMechs->getExitFlagStatus() == false)  
+    while(gameMechs->getExitFlagStatus() == false)  
     {
         GetInput();
         RunLogic();
@@ -50,14 +48,14 @@ void Initialize(void)
 
     
 
-    testMechs = new GameMechs(); //creating gamemechs on the heap
-    player = new Player(testMechs);
-
+    gameMechs = new GameMechs(); //creating gamemechs on the heap
+    player = new Player(gameMechs);
 }
 
 void GetInput(void)
 {
-   testMechs->getInput();
+    testMechs->getInput();
+    gameMechs->getInput();
 }
 
 void RunLogic(void)
@@ -74,29 +72,39 @@ void RunLogic(void)
     }
     
     
+    player->updatePlayerDir();
+    player->movePlayer();
+
 }
 
 void DrawScreen(void)
 {
     int row,column = 0;
-    int xpos = player->getPlayerPos().pos->x;
-    int ypos = player->getPlayerPos().pos->y;
-    MacUILib_clearScreen();    
-    MacUILib_printf("####################\n");
-    for (row = 1; row<HEIGHT-1; row++){
-        for (column = 0; column<WIDTH; column++){
-            if (column == WIDTH-1){
-                MacUILib_printf("#\n");
+    int playerXPos = player->getPlayerPos().pos->x;
+    int playerYPos = player->getPlayerPos().pos->y;
+    int boardSizeX = gameMechs->getBoardSizeX();
+    int boardSizeY = gameMechs->getBoardSizeY();
+
+
+    MacUILib_clearScreen();   
+    for (int i = 0; i< boardSizeX; i++){
+        MacUILib_printf("#"); // Prints the top border
+    }
+    MacUILib_printf("\n");
+    for (row = 1; row<gameMechs->getBoardSizeY()-1; row++){
+        for (column = 0; column<gameMechs->getBoardSizeX(); column++){
+            if (column == 0){
+                MacUILib_printf("#"); // Left border
             }
-            else if (column == 0){
-                MacUILib_printf("#");
+            else if (column == gameMechs->getBoardSizeX()-1){
+                MacUILib_printf("#\n"); // Right border
             }
-            else if (xpos == column && ypos == row){
-                MacUILib_printf("%c", player->getPlayerPos().getSymbol());
+            else if (playerXPos == column && playerYPos == row){
+                MacUILib_printf("%c", player->getPlayerPos().getSymbol()); // Prints player symbol
             }
             /*
             else{
-                for (i = 0; i<5; i++){
+                for (int i = 0; i<5; i++){
                     if(itemBin[i].x == column && itemBin[i].y == row){
                         MacUILib_printf("%c", itemBin[i].symbol);
                         item = 1;
@@ -112,7 +120,12 @@ void DrawScreen(void)
            }
         }
     }
-    MacUILib_printf("####################\n");
+    for (int i = 0; i< boardSizeX; i++){
+        MacUILib_printf("#"); // Prints the bottom border
+    }
+    MacUILib_printf("\n");
+
+    MacUILib_printf("Input:%c   ASCII:%d\n", gameMechs->getInput(), gameMechs->getInput());
 
 }
 
@@ -124,8 +137,10 @@ void LoopDelay(void)
 
 void CleanUp(void)
 {
-    MacUILib_clearScreen();   
-    delete testMechs; //deleteing gamemechs 
+    //MacUILib_clearScreen();  
+    // Idk if we're supposed to clear the screen here
+
+    delete gameMechs; //deleting gamemechs 
     delete player;
 
     MacUILib_uninit();

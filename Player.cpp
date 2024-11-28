@@ -1,20 +1,44 @@
 #include "Player.h"
 
-
+Player::Player(){
+    GameMechs gm = GameMechs();
+    mainGameMechsRef = &gm;
+    myDir = STOP;
+    playerPos.setObjPos(mainGameMechsRef->getBoardSizeX()/2, mainGameMechsRef->getBoardSizeY()/2, '*');
+}
 Player::Player(GameMechs* thisGMRef)
 {
     mainGameMechsRef = thisGMRef;
     myDir = STOP;
-    playerPos.setObjPos(10, 5, '*');
+    playerPos.setObjPos(mainGameMechsRef->getBoardSizeX()/2, mainGameMechsRef->getBoardSizeY()/2, '*');
 
     // more actions to be included
 }
 
+Player::Player(const Player &p){
+    // Copy Assignment
+    
+    mainGameMechsRef = p.mainGameMechsRef;
+    myDir = p.myDir;
+    playerPos.setObjPos(p.playerPos);
+}
+
+Player& Player::operator= (const Player &p)
+{
+    // Copy Operator
+	if (this != &p){
+        
+        this->mainGameMechsRef = p.mainGameMechsRef;
+        this->myDir = p.myDir;
+        this->playerPos.setObjPos(p.playerPos);
+	}
+	return *this;
+}
 
 Player::~Player()
 {
     // delete any heap members here
-    //delete[] playerPos;
+    delete[] &playerPos;
 
 
 }
@@ -30,6 +54,10 @@ void Player::updatePlayerDir()
         // PPA3 input processing logic      
     char input = mainGameMechsRef->getInput();
 
+    if (input >= 'a' && input <= 'z'){
+        input -= 32;
+    }
+
     if (input == 'W' && myDir != DOWN){
         myDir = UP;
     }
@@ -41,6 +69,9 @@ void Player::updatePlayerDir()
     }
     else if (input == 'D' && myDir != LEFT){
         myDir = RIGHT;
+    }
+    else if (input == ' '){
+        mainGameMechsRef->setExitTrue();
     }
 }
 
