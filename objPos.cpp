@@ -40,7 +40,6 @@ objPos& objPos::operator= (const objPos &op)
 {
     // Copy assignment Operator
 	if (this != &op){
-		this->pos = new Pos;
         this->pos->x = op.pos->x;
         this->pos->y = op.pos->y;
         this->symbol = op.symbol;

@@ -54,26 +54,28 @@ void Initialize(void)
 
 void GetInput(void)
 {
-    testMechs->getInput();
+    
     gameMechs->getInput();
 }
 
 void RunLogic(void)
 {
-    if (testMechs->getInput()==' ')
+    if (gameMechs->getInput()==' ')
     {
-        testMechs->setExitTrue();
-        testMechs->clearInput();
+        gameMechs->setExitTrue();
+        gameMechs->clearInput();
     }
     else
     {
         player->updatePlayerDir();
         player->movePlayer();
+        gameMechs->incrementScore(); //DEBUGGING REMOVE LATER
+        
     }
     
     
-    player->updatePlayerDir();
-    player->movePlayer();
+    // player->updatePlayerDir();
+    // player->movePlayer();
 
 }
 
@@ -82,7 +84,7 @@ void DrawScreen(void)
     int row,column = 0;
     int playerXPos = player->getPlayerPos().pos->x;
     int playerYPos = player->getPlayerPos().pos->y;
-    int boardSizeX = gameMechs->getBoardSizeX();
+    int boardSizeX = gameMechs->getBoardSizeX(); // Board sizes are called from gameMechs
     int boardSizeY = gameMechs->getBoardSizeY();
 
 
@@ -116,7 +118,7 @@ void DrawScreen(void)
                 } 
             }*/
            else{
-                MacUILib_printf(" ");
+                MacUILib_printf(" "); // If nothing occupies that position print a blank space
            }
         }
     }
@@ -126,7 +128,27 @@ void DrawScreen(void)
     MacUILib_printf("\n");
 
     MacUILib_printf("Input:%c   ASCII:%d\n", gameMechs->getInput(), gameMechs->getInput());
+    
+    //DEBUGGING FOR SCORE AND LOSE FLAG  
+    MacUILib_printf("Score:%d\n", gameMechs->getScore()); //CHECKING FOR SCORE INCREMENTATION
+    
+    MacUILib_printf("===End of Game Message===\n");
 
+    if (gameMechs->getLoseFlagStatus()==true)
+    {
+        MacUILib_printf("Sorry you have lost game\n");
+        gameMechs->setExitTrue();
+    }
+    else
+    {
+        if (gameMechs->getExitFlagStatus() == true)
+        {
+            
+            MacUILib_printf("You are exiting the game without winning!");
+        }
+        
+    }
+    
 }
 
 void LoopDelay(void)
