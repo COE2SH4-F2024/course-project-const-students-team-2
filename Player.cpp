@@ -38,7 +38,9 @@ Player& Player::operator= (const Player &p)
 Player::~Player()
 {
     // delete any heap members here
-    delete[] &playerPos;
+
+    //delete mainGameMechsRef;
+    //mainGameMechsRef = nullptr;
 
 
 }

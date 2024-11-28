@@ -69,7 +69,7 @@ void DrawScreen(void)
     int row,column = 0;
     int playerXPos = player->getPlayerPos().pos->x;
     int playerYPos = player->getPlayerPos().pos->y;
-    int boardSizeX = gameMechs->getBoardSizeX();
+    int boardSizeX = gameMechs->getBoardSizeX(); // Board sizes are called from gameMechs
     int boardSizeY = gameMechs->getBoardSizeY();
 
 
@@ -103,7 +103,7 @@ void DrawScreen(void)
                 } 
             }*/
            else{
-                MacUILib_printf(" ");
+                MacUILib_printf(" "); // If nothing occupies that position print a blank space
            }
         }
     }

@@ -3,6 +3,7 @@
 
 GameMechs::GameMechs()
 {
+    MacUILib_init(); // Need to initialize in every file if we use a MacUILib function
     input = 0;
     exitFlag = false;
     loseFlag = false;
@@ -13,6 +14,7 @@ GameMechs::GameMechs()
 
 GameMechs::GameMechs(int boardX, int boardY)
 {
+    MacUILib_init(); // Need to initialize in every file if we use a MacUILib function
     input = 0;
     exitFlag = false;
     loseFlag = false;
@@ -25,7 +27,8 @@ GameMechs::GameMechs(int boardX, int boardY)
 // do you need a destructor?
 GameMechs::~GameMechs()
 {
-    //at this moment, NO, no heap memebers
+    //at this moment, NO, no heap members
+    MacUILib_uninit(); 
 }
 
 bool GameMechs::getExitFlagStatus() const
@@ -41,6 +44,7 @@ bool GameMechs::getLoseFlagStatus() const
 
 char GameMechs::getInput() 
 {
+    
     if (MacUILib_hasChar())
     {
         input = MacUILib_getChar();

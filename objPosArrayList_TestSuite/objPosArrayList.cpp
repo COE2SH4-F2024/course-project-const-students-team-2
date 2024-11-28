@@ -24,6 +24,7 @@ objPosArrayList::objPosArrayList(const objPosArrayList &list){
     }
 }
 
+
 objPosArrayList& objPosArrayList::operator= (const objPosArrayList &list)
 {
     // Copy Operator
@@ -31,6 +32,7 @@ objPosArrayList& objPosArrayList::operator= (const objPosArrayList &list)
         
         this->listSize = list.getSize();
         this->arrayCapacity = list.arrayCapacity;
+        delete[] aList;
         this->aList = new objPos[this->arrayCapacity];
         for (int i = 0; i<listSize; i++){
             this->aList[i] = list.getElement(i);
@@ -42,10 +44,9 @@ objPosArrayList& objPosArrayList::operator= (const objPosArrayList &list)
 objPosArrayList::~objPosArrayList()
 {
     // Destructor
-    for (int i = 0; i< listSize; i++){
-        delete[] &aList[i];
-    }
+    
     delete[] aList;
+    aList = nullptr;
 }
 
 int objPosArrayList::getSize() const
@@ -60,14 +61,14 @@ void objPosArrayList::insertHead(objPos thisPos)
         arrayCapacity += 200;
         aList = new objPos[arrayCapacity];
     }
-    printf("%d\n", listSize -1);
+    //printf("%d\n", listSize -1);
     for (int i = listSize -1; i >=0; i--){
             aList[i+1] = aList[i];
         }
     aList[0] = thisPos;
-    printf("%d\n", aList[0].pos->x);
-    printf("%d\n", aList[0].pos->y);
-    printf("%c\n", aList[0].symbol);
+   // printf("%d\n", aList[0].pos->x);
+    //printf("%d\n", aList[0].pos->y);
+    //printf("%c\n", aList[0].symbol);
     listSize++;
 }
 
@@ -98,7 +99,7 @@ void objPosArrayList::removeHead()
 
 void objPosArrayList::removeTail()
 {
-    delete[] &aList[listSize-1];
+    delete &aList[listSize-1];
     listSize--;
 }
 
