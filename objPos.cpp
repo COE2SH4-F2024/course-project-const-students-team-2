@@ -20,8 +20,9 @@ objPos::objPos(int xPos, int yPos, char sym) //additonal constructor
 // [TODO] Implement the missing special member functions to meet the minimum four rule
 //      - Destructor DONE
 //      - Copy Assignment DONE
-//      - Copy Operator 
+//      - Copy Operator DONE
 // Add to objPos.h too
+
 objPos:: ~objPos()
 {
 	delete pos;

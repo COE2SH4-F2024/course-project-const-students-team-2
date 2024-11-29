@@ -55,6 +55,7 @@ void Initialize(void)
     gameMechs = new GameMechs(); //creating gamemechs on the heap
     player = new Player(gameMechs);
     foodpos = new Food();
+    foodpos->generateFood(player->getPlayerPos());
     
 }
 
@@ -62,10 +63,19 @@ void GetInput(void)
 {
     
     gameMechs->getInput();
+    //DEBUGGING CHANGING RANDOM ON THE FLY WITH DEBUG-KEY 
+    if (gameMechs->getInput() == 'n')
+    {
+        
+        foodpos->generateFood(player->getPlayerPos());
+        gameMechs->clearInput();
+        
+    }
 }
 
 void RunLogic(void)
 {
+    
     if (gameMechs->getInput()==' ')
     {
         gameMechs->setExitTrue();
@@ -76,6 +86,7 @@ void RunLogic(void)
         player->updatePlayerDir();
         player->movePlayer();
         gameMechs->incrementScore(); //DEBUGGING REMOVE LATER
+        
         
         
     }
@@ -102,14 +113,14 @@ void DrawScreen(void)
         MacUILib_printf("#"); // Prints the top border
     }
     MacUILib_printf("\n");
-    for (row = 1; row< gameMechs->getBoardSizeY()-1; row++) //can u replace that with boardSizeY
+    for (row = 1; row< boardSizeY-1; row++) //can u replace that with boardSizeY
     {
-        for (column = 0; column <gameMechs->getBoardSizeX(); column++)
+        for (column = 0; column <boardSizeX; column++)
         {
             if (column == 0){
                 MacUILib_printf("#"); // Left border
             }
-            else if (column == gameMechs->getBoardSizeX()-1)
+            else if (column == boardSizeX-1)
             {
                 MacUILib_printf("#\n"); // Right border
             }
@@ -119,7 +130,7 @@ void DrawScreen(void)
             }
             else if (column == foodXpos && row == foodYpos)
             {
-                MacUILib_printf("%c", foodpos->getFoodpos().getSymbol());
+                MacUILib_printf("%c", foodpos->getFoodpos().getSymbol()); //food symbol
             }
             /*
             else{
@@ -146,8 +157,10 @@ void DrawScreen(void)
 
     MacUILib_printf("Input:%c   ASCII:%d\n", gameMechs->getInput(), gameMechs->getInput());
     
-    //DEBUGGING FOR SCORE AND LOSE FLAG  
+    //===DEBUGGING===
     MacUILib_printf("Score:%d\n", gameMechs->getScore()); //CHECKING FOR SCORE INCREMENTATION
+    MacUILib_printf("Food position:[%d,%d]\n",foodpos->getFoodpos().pos->x, foodpos->getFoodpos().pos->y); //DISPLAY FOOD POSITION
+    //===DEBUGGING===
     
     MacUILib_printf("===End of Game Message===\n");
 
