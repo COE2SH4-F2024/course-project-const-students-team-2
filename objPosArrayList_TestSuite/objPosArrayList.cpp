@@ -7,7 +7,7 @@
 objPosArrayList::objPosArrayList()
 {
     listSize = 0;
-    arrayCapacity = 200;
+    arrayCapacity = ARRAY_MAX_CAP;
     aList = new objPos[arrayCapacity];
 
 }
@@ -19,9 +19,12 @@ objPosArrayList::objPosArrayList(const objPosArrayList &list){
     listSize = list.getSize();
     arrayCapacity = list.arrayCapacity;
     aList = new objPos[arrayCapacity];
+    printf("List: [");
     for (int i = 0; i<listSize; i++){
-        aList[i] = list.getElement(i);
+        aList[i] = list.aList[i];
+        printf("(%d, %d, '%c'), ", aList[i].pos->x, aList[i].pos->y, aList[i].symbol);
     }
+    printf("]\n");
 }
 
 
@@ -35,7 +38,7 @@ objPosArrayList& objPosArrayList::operator= (const objPosArrayList &list)
         delete[] aList;
         this->aList = new objPos[this->arrayCapacity];
         for (int i = 0; i<listSize; i++){
-            this->aList[i] = list.getElement(i);
+            this->aList[i] = list.aList[i];
         }
 	}
 	return *this;
@@ -44,8 +47,8 @@ objPosArrayList& objPosArrayList::operator= (const objPosArrayList &list)
 objPosArrayList::~objPosArrayList()
 {
     // Destructor
-    
     delete[] aList;
+    
     aList = nullptr;
 }
 
@@ -57,35 +60,55 @@ int objPosArrayList::getSize() const
 void objPosArrayList::insertHead(objPos thisPos)
 {
     if (arrayCapacity <= listSize){
-        printf("Array Increase\n");
-        arrayCapacity += 200;
-        aList = new objPos[arrayCapacity];
+        arrayCapacity += ARRAY_MAX_CAP;
+        objPos* newList = new objPos[arrayCapacity];
+        for (int i = 0; i<listSize; i++){
+            newList[i] = aList[i];
+        }
+        delete[] aList;
+        objPos* aList = new objPos[arrayCapacity];
+        aList = newList;
+        delete[] newList;
     }
-    //printf("%d\n", listSize -1);
     for (int i = listSize -1; i >=0; i--){
             aList[i+1] = aList[i];
         }
+    printf("Adding element [%d] (x:%d, y:%d)\n", 0, aList[0].pos->x, aList[0].pos->y);
     aList[0] = thisPos;
-   // printf("%d\n", aList[0].pos->x);
-    //printf("%d\n", aList[0].pos->y);
-    //printf("%c\n", aList[0].symbol);
     listSize++;
+
+
+     printf("List: [");
+    for (int i = 0; i<listSize; i++){
+        printf("(%d, %d, '%c'), ", aList[i].pos->x, aList[i].pos->y, aList[i].symbol);
+    }
+    printf("]\n");
 }
 
 void objPosArrayList::insertTail(objPos thisPos)
 {
     
     if (arrayCapacity <= listSize){
-        objPos* newList = aList;
+        arrayCapacity += ARRAY_MAX_CAP;
+        objPos* newList = new objPos[arrayCapacity];
+        for (int i = 0; i<listSize; i++){
+            newList[i] = aList[i];
+        }
         delete[] aList;
-        arrayCapacity += 200;
-        aList = new objPos[arrayCapacity];
+        objPos* aList = new objPos[arrayCapacity];
+        aList = newList;
         delete[] newList;
     }
-    
+
+    printf("Adding element [%d] (x:%d, y:%d)\n", listSize, aList[listSize].pos->x, aList[listSize].pos->y);
     aList[listSize] = thisPos;
     listSize++;
     
+    printf("List: [");
+    for (int i = 0; i<listSize; i++){
+        printf("(%d, %d, '%c'), ", aList[i].pos->x, aList[i].pos->y, aList[i].symbol);
+    }
+    printf("]\n");
 }
 
 void objPosArrayList::removeHead()
@@ -93,14 +116,27 @@ void objPosArrayList::removeHead()
     for (int i = 0; i <listSize-1; i++){
             aList[i] = aList[i+1];
     }
-    delete[] &aList[listSize-1];
     listSize--;
+    printf("Deleting element [%d] (x:%d, y:%d)\n", listSize, aList[listSize].pos->x, aList[listSize].pos->y);
+    delete &aList[listSize];
+    printf("List: [");
+    for (int i = 0; i<listSize; i++){
+        printf("(%d, %d, '%c'), ", aList[i].pos->x, aList[i].pos->y, aList[i].symbol);
+    }
+    printf("]\n");
 }
 
 void objPosArrayList::removeTail()
 {
-    delete &aList[listSize-1];
     listSize--;
+    printf("Deleting element [%d] (x:%d, y:%d)\n", listSize, aList[listSize].pos->x, aList[listSize].pos->y);
+    delete &aList[listSize];
+
+    printf("List: [");
+    for (int i = 0; i<listSize; i++){
+        printf("(%d, %d, '%c'), ", aList[i].pos->x, aList[i].pos->y, aList[i].symbol);
+    }
+    printf("]\n");
 }
 
 objPos objPosArrayList::getHeadElement() const
@@ -116,5 +152,6 @@ objPos objPosArrayList::getTailElement() const
 objPos objPosArrayList::getElement(int index) const
 {
     return aList[index];
+    /// WATCH VIDEO, HANDLE EXCEPTIONS
 }
 

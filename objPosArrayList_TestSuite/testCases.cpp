@@ -140,6 +140,8 @@ void testInsertHead_5Element()
 	currentPos = thisList.getHeadElement();
 	actualCheck = headPos.isPosEqual(&currentPos);
 
+
+
 	result &= assert_equal(expectedCheck, actualCheck);
 
 	// Next, chech the body elements at index 1, 2, and 3.
@@ -241,6 +243,7 @@ void testInsertTail_5Element()
 	// Then, check the head element is the common body element
 	currentPos = thisList.getHeadElement();
 	actualCheck = bodyPos.isPosEqual(&currentPos);
+	//printf("Actual (x:%d, y:%d)\n", currentPos.pos->x, currentPos.pos->y);
 
 	result &= assert_equal(expectedCheck, actualCheck);
 
@@ -250,12 +253,15 @@ void testInsertTail_5Element()
 		currentPos = thisList.getElement(i);
 		actualCheck = bodyPos.isPosEqual(&currentPos);
 
+		//printf("Actual (x:%d, y:%d)\n", currentPos.pos->x, currentPos.pos->y);
+
 		result &= assert_equal(expectedCheck, actualCheck);	
 	}
 
 	// Finally, check the tail element is the body element
 	currentPos = thisList.getTailElement();
 	actualCheck = tailPos.isPosEqual(&currentPos);
+	//printf("Actual (x:%d, y:%d)\n", currentPos.pos->x, currentPos.pos->y);
 
 	result &= assert_equal(expectedCheck, actualCheck);
 
@@ -396,6 +402,7 @@ void testRemoveTail_5Element()
 	// Then, check the tail element removed
 	currentPos = thisList.getTailElement();
 	actualCheck = bodyPos.isPosEqual(&currentPos);
+	//printf("Actual (x:%d, y:%d)\n", currentPos.pos->x, currentPos.pos->y);
 
 	result &= assert_equal(expectedCheck, actualCheck);
 
@@ -404,9 +411,11 @@ void testRemoveTail_5Element()
 	{
 		currentPos = thisList.getElement(i);
 		actualCheck = bodyPos.isPosEqual(&currentPos);
+		//printf("Actual (x:%d, y:%d)\n", currentPos.pos->x, currentPos.pos->y);
 
 		result &= assert_equal(expectedCheck, actualCheck);	
 	}
+
 
 	// The destructor will be called automatically for stack-allocated objects
 
