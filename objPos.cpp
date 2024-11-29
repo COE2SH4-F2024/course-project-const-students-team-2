@@ -8,7 +8,7 @@ objPos::objPos() //default constructor
     symbol = 0; //NULL
 }
 
-objPos::objPos(int xPos, int yPos, char sym) //additonal constructor 
+objPos::objPos(int xPos, int yPos, char sym) //additional constructor 
 {
     pos = new Pos;
     pos->x = xPos;
