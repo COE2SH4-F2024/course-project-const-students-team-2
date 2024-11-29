@@ -3,6 +3,7 @@
 #include "objPos.h"
 #include "Player.h"
 #include "GameMechs.h"
+#include "Food.h"
 
 using namespace std;
 
@@ -12,6 +13,9 @@ using namespace std;
 
 Player* player;
 GameMechs* gameMechs;
+Food* foodpos; 
+
+
 
 
 void Initialize(void);
@@ -50,6 +54,8 @@ void Initialize(void)
 
     gameMechs = new GameMechs(); //creating gamemechs on the heap
     player = new Player(gameMechs);
+    foodpos = new Food();
+    
 }
 
 void GetInput(void)
@@ -71,6 +77,7 @@ void RunLogic(void)
         player->movePlayer();
         gameMechs->incrementScore(); //DEBUGGING REMOVE LATER
         
+        
     }
     
     
@@ -84,6 +91,8 @@ void DrawScreen(void)
     int row,column = 0;
     int playerXPos = player->getPlayerPos().pos->x;
     int playerYPos = player->getPlayerPos().pos->y;
+    int foodXpos = foodpos->getFoodpos().pos->x;
+    int foodYpos = foodpos ->getFoodpos().pos->y;
     int boardSizeX = gameMechs->getBoardSizeX(); // Board sizes are called from gameMechs
     int boardSizeY = gameMechs->getBoardSizeY();
 
@@ -93,16 +102,24 @@ void DrawScreen(void)
         MacUILib_printf("#"); // Prints the top border
     }
     MacUILib_printf("\n");
-    for (row = 1; row<gameMechs->getBoardSizeY()-1; row++){
-        for (column = 0; column<gameMechs->getBoardSizeX(); column++){
+    for (row = 1; row< gameMechs->getBoardSizeY()-1; row++) //can u replace that with boardSizeY
+    {
+        for (column = 0; column <gameMechs->getBoardSizeX(); column++)
+        {
             if (column == 0){
                 MacUILib_printf("#"); // Left border
             }
-            else if (column == gameMechs->getBoardSizeX()-1){
+            else if (column == gameMechs->getBoardSizeX()-1)
+            {
                 MacUILib_printf("#\n"); // Right border
             }
-            else if (playerXPos == column && playerYPos == row){
+            else if (playerXPos == column && playerYPos == row)
+            {
                 MacUILib_printf("%c", player->getPlayerPos().getSymbol()); // Prints player symbol
+            }
+            else if (column == foodXpos && row == foodYpos)
+            {
+                MacUILib_printf("%c", foodpos->getFoodpos().getSymbol());
             }
             /*
             else{
@@ -164,6 +181,7 @@ void CleanUp(void)
 
     delete gameMechs; //deleting gamemechs 
     delete player;
+    delete foodpos;
 
     MacUILib_uninit();
     

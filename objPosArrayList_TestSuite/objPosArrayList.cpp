@@ -115,6 +115,6 @@ objPos objPosArrayList::getTailElement() const
 
 objPos objPosArrayList::getElement(int index) const
 {
-    return aList[index];
+    return aList[index]; //handling outofbounds (according to DR.chen's video)
 }
 
