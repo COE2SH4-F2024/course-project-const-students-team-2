@@ -153,5 +153,6 @@ objPos objPosArrayList::getElement(int index) const
 {
     return aList[index];
     /// WATCH VIDEO, HANDLE EXCEPTIONS
+    return aList[index]; //handling outofbounds (according to DR.chen's video)
 }
 

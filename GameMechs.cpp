@@ -30,7 +30,29 @@ GameMechs::~GameMechs()
     //at this moment, NO, no heap members
     MacUILib_uninit(); 
 }
-
+//copy constructors
+GameMechs:: GameMechs(const GameMechs &game)
+{
+    input = game.input;
+    exitFlag = game.exitFlag;
+    loseFlag = game.loseFlag;
+    score = game.score;
+    boardSizeX = game.boardSizeX;
+    boardSizeY = game.boardSizeY;
+}
+GameMechs& GameMechs::operator= (const GameMechs &game)
+{
+    if (this != &game)
+    {
+        this->input = game.input;
+        this->exitFlag = game.exitFlag;
+        this->loseFlag = game.loseFlag;
+        this->score = game.score;
+        this->boardSizeX = game.boardSizeX;
+        this->boardSizeY = game.boardSizeY;
+	}
+	return *this;
+}
 bool GameMechs::getExitFlagStatus() const
 {
     return exitFlag;
@@ -75,10 +97,7 @@ int GameMechs::getBoardSizeY() const
 
 void GameMechs::setExitTrue()
 {
-    if (input == ' ')
-    {
-        exitFlag = true;
-    }
+    exitFlag = true;
 }
 
 void GameMechs::setLoseFlag()
