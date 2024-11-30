@@ -55,7 +55,7 @@ void Initialize(void)
     gameMechs = new GameMechs(); //creating gamemechs on the heap
     player = new Player(gameMechs);
     foodpos = new Food();
-    foodpos->generateFood(player->getPlayerPos());
+    foodpos->generateFood(player->getPlayerPos()->getHeadElement());
     
 }
 
@@ -66,8 +66,9 @@ void GetInput(void)
     //DEBUGGING CHANGING RANDOM ON THE FLY WITH DEBUG-KEY 
     if (gameMechs->getInput() == 'n')
     {
-        
-        foodpos->generateFood(player->getPlayerPos());
+        // !!!!
+        // Cycle through all snake segments and make sure food isn't there
+        foodpos->generateFood(player->getPlayerPos()->getHeadElement());
         gameMechs->clearInput();
         
     }
@@ -83,7 +84,7 @@ void RunLogic(void)
     }
     else
     {
-        player->updatePlayerDir();
+        //player->updatePlayerDir(); Put inside movePlayer function
         player->movePlayer();
         gameMechs->incrementScore(); //DEBUGGING REMOVE LATER
         
@@ -101,8 +102,11 @@ void DrawScreen(void)
 {
     int row,column = 0;
 
-    int playerXPos = player->getPlayerPos().pos->x;
-    int playerYPos = player->getPlayerPos().pos->y;
+    objPosArrayList * playerPos = player->getPlayerPos();
+    int playerSize = playerPos->getSize();
+
+    // int playerXPos = player->getPlayerPos().pos->x;
+    // int playerYPos = player->getPlayerPos().pos->y;
 
     int foodXpos = foodpos->getFoodpos().pos->x;
     int foodYpos = foodpos ->getFoodpos().pos->y;
@@ -121,6 +125,19 @@ void DrawScreen(void)
     {
         for (column = 0; column <boardSizeX; column++)
         {
+
+            // iterate through the playerpos array list to print all segments out
+
+            for (int k = 0; k<playerSize; k++){
+                objPos thisSeg = playerPos->getElement(k);
+
+                // check if the current segment x, y, pos matches the coordinate, if yes print the symbol
+
+                // watch out!! we need to skip the if else block below if we have printed something in the for loop
+            }
+
+            // at the end of the for loop. do something to determine whether to continue with the if else of move on to next iteration
+
             if (column == 0){
                 MacUILib_printf("#"); // Left border
             }
@@ -128,10 +145,10 @@ void DrawScreen(void)
             {
                 MacUILib_printf("#\n"); // Right border
             }
-            else if (playerXPos == column && playerYPos == row)
-            {
-                MacUILib_printf("%c", player->getPlayerPos().getSymbol()); // Prints player symbol
-            }
+            // else if (playerXPos == column && playerYPos == row)
+            // {
+            //     MacUILib_printf("%c", player->getPlayerPos().getSymbol()); // Prints player symbol
+            // }
             else if (column == foodXpos && row == foodYpos)
             {
                 MacUILib_printf("%c", foodpos->getFoodpos().getSymbol()); //food symbol

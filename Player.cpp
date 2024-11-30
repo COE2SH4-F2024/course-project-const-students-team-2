@@ -3,14 +3,21 @@
 Player::Player(){
     GameMechs gm = GameMechs();
     mainGameMechsRef = &gm;
+    playerPosList = new objPosArrayList();
+
+    objPos headPos(mainGameMechsRef->getBoardSizeX()/2, mainGameMechsRef->getBoardSizeY()/2, '@');
     myDir = STOP;
-    playerPos.setObjPos(mainGameMechsRef->getBoardSizeX()/2, mainGameMechsRef->getBoardSizeY()/2, '*');
+
+    playerPosList->insertHead(headPos);
 }
 Player::Player(GameMechs* thisGMRef)
 {
     mainGameMechsRef = thisGMRef;
     myDir = STOP;
-    playerPos.setObjPos(mainGameMechsRef->getBoardSizeX()/2, mainGameMechsRef->getBoardSizeY()/2, '*');
+    playerPosList = new objPosArrayList();
+
+    objPos headPos(mainGameMechsRef->getBoardSizeX()/2, mainGameMechsRef->getBoardSizeY()/2, '@');
+    playerPosList->insertHead(headPos);
 
     // more actions to be included
 }
@@ -20,7 +27,11 @@ Player::Player(const Player &p){
     
     mainGameMechsRef = p.mainGameMechsRef;
     myDir = p.myDir;
-    playerPos.setObjPos(p.playerPos);
+
+    playerPosList = new objPosArrayList();
+    for (int i = 0; i<p.playerPosList->getSize(); i++){
+        playerPosList->insertTail(p.getPlayerPos()->getElement(i));
+    }
 }
 
 Player& Player::operator= (const Player &p)
@@ -30,21 +41,25 @@ Player& Player::operator= (const Player &p)
         
         this->mainGameMechsRef = p.mainGameMechsRef;
         this->myDir = p.myDir;
-        this->playerPos.setObjPos(p.playerPos);
+        this->playerPosList = p.playerPosList;
+        for (int i = 0; i<p.playerPosList->getSize(); i++){
+            playerPosList->insertTail(p.getPlayerPos()->getElement(i));
+        }
 	}
 	return *this;
 }
 
 Player::~Player()
 {
-    // delete any heap members here (No heap members for now)
+    // delete any heap members here
+    delete playerPosList;
 
 }
 
-objPos Player::getPlayerPos() const
+objPosArrayList* Player::getPlayerPos() const
 {
     // return the reference to the playerPos arrray list
-    return playerPos;
+    return playerPosList;
 }
 
 void Player::updatePlayerDir()
@@ -82,10 +97,6 @@ void Player::updatePlayerDir()
             }
             break;
 
-        // case ' ':
-        //     mainGameMechsRef->setExitTrue();
-        //     break;
-
         default:
             break;
     }
@@ -94,48 +105,60 @@ void Player::updatePlayerDir()
 
 void Player::movePlayer()
 {
+    updatePlayerDir();
     // PPA3 Finite State Machine logic
-    switch (myDir){
+    // I3: create a temp objPos to calculate the new head psoition
+        // probably should get the head element of the player position list as a good starting point
+    // switch (myDir){
 
-        case UP:
-            if (playerPos.pos->y > 1){
-                playerPos.pos->y --;
-            }
-            else{
-                playerPos.pos->y = mainGameMechsRef->getBoardSizeY()-2;
-            }
-            break;
+    //     // Calculate new head position using the temp objpos
 
-        case DOWN:
-            if (playerPos.pos->y < mainGameMechsRef->getBoardSizeY()-2){
-                playerPos.pos->y ++;
-            }
-            else{
-                playerPos.pos->y = 1;
-            }
-            break;
+    //     case UP:
+    //         if (playerPos.pos->y > 1){
+    //             playerPos.pos->y --;
+    //         }
+    //         else{
+    //             playerPos.pos->y = mainGameMechsRef->getBoardSizeY()-2;
+    //         }
+    //         break;
 
-        case LEFT:
-            if (playerPos.pos->x > 1){
-                playerPos.pos->x--;
-            }
-            else{
-                playerPos.pos->x = mainGameMechsRef->getBoardSizeX()-2;
-            }
-            break;
+    //     case DOWN:
+    //         if (playerPos.pos->y < mainGameMechsRef->getBoardSizeY()-2){
+    //             playerPos.pos->y ++;
+    //         }
+    //         else{
+    //             playerPos.pos->y = 1;
+    //         }
+    //         break;
 
-        case RIGHT:
-            if (playerPos.pos->x < mainGameMechsRef->getBoardSizeX()-2){
-                playerPos.pos->x ++;
-            }
-            else{
-                playerPos.pos->x = 1;
-            }
-            break;
+    //     case LEFT:
+    //         if (playerPos.pos->x > 1){
+    //             playerPos.pos->x--;
+    //         }
+    //         else{
+    //             playerPos.pos->x = mainGameMechsRef->getBoardSizeX()-2;
+    //         }
+    //         break;
 
-        default:
-            break;
-    }
+    //     case RIGHT:
+    //         if (playerPos.pos->x < mainGameMechsRef->getBoardSizeX()-2){
+    //             playerPos.pos->x ++;
+    //         }
+    //         else{
+    //             playerPos.pos->x = 1;
+    //         }
+    //         break;
+
+    //     default:
+    //         break;
+    // }
+    // Insert temp objPos to head of the list
+
+    // Iter 3 (later) check if new temp object position overlaps food position (get it from gameMechs)
+
+    // use isPosEqual() from objPos class
+    // If overlapped, food consumed, don't remove snake tail
+    // Increase score
 }
 
 // More methods to be added

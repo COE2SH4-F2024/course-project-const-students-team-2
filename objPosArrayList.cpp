@@ -1,6 +1,6 @@
 #include "objPosArrayList.h"
 
-#include "stdio.h" // Check if this library needs to be deleted after testing
+#include <iostream>
 
 // Check lecture contents on general purpose array list construction, 
 // and modify it to support objPos array list construction.
@@ -67,7 +67,7 @@ void objPosArrayList::insertHead(objPos thisPos)
 {
 
     if (listSize >= arrayCapacity){
-        printf("INSERT HEAD");
+            throw std::overflow_error("[ERROR]: Array full, can't insert");
         return;
     }
 
@@ -88,7 +88,7 @@ void objPosArrayList::insertTail(objPos thisPos)
 {
 
     if (listSize >= arrayCapacity){
-        printf("Insert Tail");
+        throw std::overflow_error("[ERROR]: Array full, can't insert");
         return;
     }
 
@@ -108,6 +108,9 @@ void objPosArrayList::removeHead()
         listSize--; // We don't have to delete the duplicated tail element
                     // We just shorten the length of the list and the program ignores the second one
     }
+    else{
+        throw std::underflow_error("[ERROR]: Array empty, can't remove element");
+    }
 }
 
 void objPosArrayList::removeTail()
@@ -115,23 +118,37 @@ void objPosArrayList::removeTail()
     if (listSize > 0){
         listSize--;
     }
+    else{
+        throw std::underflow_error("[ERROR]: Array empty, can't remove element");
+    }
 }
 
 objPos objPosArrayList::getHeadElement() const
 {
-    return aList[0];
+    if (listSize > 0){
+        return aList[0];
+    }
+    else{
+        throw std::out_of_range("[ERROR]: Array empty, no head element");
+    }
+    
 }
 
 objPos objPosArrayList::getTailElement() const
 {
-    return aList[listSize-1];
+    if (listSize > 0){
+        return aList[listSize-1];
+    }
+    else{
+        throw std::out_of_range("[ERROR]: Array empty, no tail element");
+    }
 }
 
 objPos objPosArrayList::getElement(int index) const
 {
     
     if (index >= listSize || index < 0){
-        // throw exception
+        throw std::out_of_range("[ERROR]: Index out of range");
     }
 
     return aList[index]; //handling outofbounds (according to DR.chen's video)

@@ -24,15 +24,18 @@ class Player
         Player(const Player &p);
         Player& operator= (const Player &p);
 
-        objPos getPlayerPos() const; // Upgrade this in iteration 3.       
-        void updatePlayerDir();
+        objPosArrayList* getPlayerPos() const; // Upgrade this in iteration 3.       
+        
         void movePlayer();
 
         // More methods to be added here
 
     private:
-        objPos playerPos; // Upgrade this in iteration 3.       
+        //objPos playerPos; // Upgrade this in iteration 3.  
+        void updatePlayerDir();     
         enum Dir myDir = STOP;
+
+        objPosArrayList* playerPosList;
 
         // Need a reference to the Main Game Mechanisms
         GameMechs* mainGameMechsRef;
