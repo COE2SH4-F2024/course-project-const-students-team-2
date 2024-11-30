@@ -11,6 +11,8 @@ Player::Player(){
     playerPosList->insertHead(headPos);
     playerPosList->insertHead(headPos);
     playerPosList->insertHead(headPos);
+    playerPosList->insertHead(headPos);
+    playerPosList->insertHead(headPos);
     
 }
 Player::Player(GameMechs* thisGMRef)
@@ -20,6 +22,8 @@ Player::Player(GameMechs* thisGMRef)
     playerPosList = new objPosArrayList();
 
     objPos headPos(mainGameMechsRef->getBoardSizeX()/2, mainGameMechsRef->getBoardSizeY()/2, '@');
+    playerPosList->insertHead(headPos);
+    playerPosList->insertHead(headPos);
     playerPosList->insertHead(headPos);
     playerPosList->insertHead(headPos);
     playerPosList->insertHead(headPos);
@@ -125,6 +129,7 @@ void Player::movePlayer()
 
     switch (myDir){
         case UP:
+        
 
             if (headY > 1){
                 temp.setObjPos(headX, headY-1, '@');
@@ -164,7 +169,18 @@ void Player::movePlayer()
              break;
     }
 
+    if (myDir != STOP){
+        for (int i = 0; i<playerPosList->getSize(); i++){
 
+            if (playerPosList->getElement(i).isPosEqual(&temp)){
+                mainGameMechsRef->setLoseFlag();
+                mainGameMechsRef->setExitTrue();
+                return;
+            }
+        }
+    }
+
+    
     playerPosList->insertHead(temp);
     playerPosList->removeTail();
     // Insert temp objPos to head of the list
