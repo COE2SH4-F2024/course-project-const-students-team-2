@@ -132,7 +132,7 @@ void DrawScreen(void)
             // iterate through the playerpos array list to print all segments out
 
             for (int k = 0; k<playerSize; k++){
-                objPos thisSeg = playerPos->getElement(k);
+                objPos thisSeg = objPos(playerPos->getElement(k));
                 if (row == thisSeg.pos->y && column == thisSeg.pos->x){
                     MacUILib_printf("%c", thisSeg.getSymbol());
                     drewSnakeSegment = true;
@@ -191,6 +191,10 @@ void DrawScreen(void)
     //===DEBUGGING===
     MacUILib_printf("Score:%d\n", gameMechs->getScore()); //CHECKING FOR SCORE INCREMENTATION
     //MacUILib_printf("Food position:[%d,%d]\n",foodpos->getFoodpos().pos->x, foodpos->getFoodpos().pos->y); //DISPLAY FOOD POSITION
+    MacUILib_printf("Snake size: %d\n", player->getPlayerPos()->getSize());
+    for (int i = 0; i<player->getPlayerPos()->getSize(); i++){
+        MacUILib_printf("Snake segment [%d]: (%d, %d, %c)\n",i,  player->getPlayerPos()->getElement(i).pos->x, player->getPlayerPos()->getElement(i).pos->y, player->getPlayerPos()->getElement(i).symbol);
+    }
     //===DEBUGGING===
     
     MacUILib_printf("===End of Game Message===\n");

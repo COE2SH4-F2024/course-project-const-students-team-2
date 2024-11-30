@@ -46,6 +46,8 @@ Player& Player::operator= (const Player &p)
         
         this->mainGameMechsRef = p.mainGameMechsRef;
         this->myDir = p.myDir;
+        delete playerPosList;
+        this->playerPosList = new objPosArrayList();
         this->playerPosList = p.playerPosList;
         for (int i = 0; i<p.playerPosList->getSize(); i++){
             playerPosList->insertTail(p.getPlayerPos()->getElement(i));
@@ -117,7 +119,7 @@ void Player::movePlayer()
 
     updatePlayerDir();
 
-    objPos temp = playerPosList->getHeadElement();
+    objPos temp = objPos(playerPosList->getHeadElement());
     int headX = temp.pos->x;
     int headY = temp.pos->y;
 
@@ -161,6 +163,7 @@ void Player::movePlayer()
          default:
              break;
     }
+
 
     playerPosList->insertHead(temp);
     playerPosList->removeTail();
