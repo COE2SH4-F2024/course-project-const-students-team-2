@@ -9,6 +9,9 @@ Player::Player(){
     myDir = STOP;
 
     playerPosList->insertHead(headPos);
+    playerPosList->insertHead(headPos);
+    playerPosList->insertHead(headPos);
+    
 }
 Player::Player(GameMechs* thisGMRef)
 {
@@ -17,6 +20,8 @@ Player::Player(GameMechs* thisGMRef)
     playerPosList = new objPosArrayList();
 
     objPos headPos(mainGameMechsRef->getBoardSizeX()/2, mainGameMechsRef->getBoardSizeY()/2, '@');
+    playerPosList->insertHead(headPos);
+    playerPosList->insertHead(headPos);
     playerPosList->insertHead(headPos);
 
     // more actions to be included
@@ -109,49 +114,58 @@ void Player::movePlayer()
     // PPA3 Finite State Machine logic
     // I3: create a temp objPos to calculate the new head psoition
         // probably should get the head element of the player position list as a good starting point
+
+    objPos temp = playerPosList->getHeadElement();
+    int headX = temp.pos->x;
+    int headY = temp.pos->y;
+
     switch (myDir){
 
         // Calculate new head position using the temp objpos
 
         case UP:
-            if (playerPos.pos->y > 1){
-                playerPos.pos->y --;
+
+            if (headY > 1){
+                temp.setObjPos(headX, headY-1, '@');
             }
             else{
-                playerPos.pos->y = mainGameMechsRef->getBoardSizeY()-2;
+                temp.setObjPos(headX, mainGameMechsRef->getBoardSizeY()-2, '@');
             }
             break;
 
         case DOWN:
-            if (playerPos.pos->y < mainGameMechsRef->getBoardSizeY()-2){
-                playerPos.pos->y ++;
+            if (headY < mainGameMechsRef->getBoardSizeY()-2){
+                temp.setObjPos(headX, headY+1, '@');
             }
             else{
-                playerPos.pos->y = 1;
+                temp.setObjPos(headX, 1, '@');
             }
             break;
 
          case LEFT:
-             if (playerPos.pos->x > 1){
-                 playerPos.pos->x--;
-             }
-             else{
-                 playerPos.pos->x = mainGameMechsRef->getBoardSizeX()-2;
-             }
+             if (headX > 1){
+                temp.setObjPos(headX-1, headY, '@');
+            }
+            else{
+                temp.setObjPos(mainGameMechsRef->getBoardSizeX()-2, headY, '@');
+            }
              break;
 
          case RIGHT:
-             if (playerPos.pos->x < mainGameMechsRef->getBoardSizeX()-2){
-                 playerPos.pos->x ++;
-             }
-             else{
-                 playerPos.pos->x = 1;
-             }
+             if (headX < mainGameMechsRef->getBoardSizeX()-2){
+                temp.setObjPos(headX+1, headY, '@');
+            }
+            else{
+                temp.setObjPos(1, headY, '@');
+            }
              break;
 
          default:
              break;
     }
+
+    playerPosList->insertHead(temp);
+    playerPosList->removeTail();
     // Insert temp objPos to head of the list
 
     // Iter 3 (later) check if new temp object position overlaps food position (get it from gameMechs)
