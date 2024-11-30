@@ -100,20 +100,24 @@ void RunLogic(void)
 void DrawScreen(void)
 {
     int row,column = 0;
+
     int playerXPos = player->getPlayerPos().pos->x;
     int playerYPos = player->getPlayerPos().pos->y;
+
     int foodXpos = foodpos->getFoodpos().pos->x;
     int foodYpos = foodpos ->getFoodpos().pos->y;
+
     int boardSizeX = gameMechs->getBoardSizeX(); // Board sizes are called from gameMechs
     int boardSizeY = gameMechs->getBoardSizeY();
 
-
     MacUILib_clearScreen();   
+
     for (int i = 0; i< boardSizeX; i++){
         MacUILib_printf("#"); // Prints the top border
     }
     MacUILib_printf("\n");
-    for (row = 1; row< boardSizeY-1; row++) //can u replace that with boardSizeY
+
+    for (row = 1; row< boardSizeY-1; row++)
     {
         for (column = 0; column <boardSizeX; column++)
         {

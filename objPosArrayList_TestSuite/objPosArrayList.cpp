@@ -19,12 +19,10 @@ objPosArrayList::objPosArrayList(const objPosArrayList &list){
     listSize = list.getSize();
     arrayCapacity = list.arrayCapacity;
     aList = new objPos[arrayCapacity];
-    printf("List: [");
+
     for (int i = 0; i<listSize; i++){
         aList[i] = list.aList[i];
-        printf("(%d, %d, '%c'), ", aList[i].pos->x, aList[i].pos->y, aList[i].symbol);
     }
-    printf("]\n");
 }
 
 
@@ -35,10 +33,17 @@ objPosArrayList& objPosArrayList::operator= (const objPosArrayList &list)
         
         this->listSize = list.getSize();
         this->arrayCapacity = list.arrayCapacity;
-        delete[] aList;
-        this->aList = new objPos[this->arrayCapacity];
-        for (int i = 0; i<listSize; i++){
-            this->aList[i] = list.aList[i];
+
+        if (list.arrayCapacity > 0) {
+            delete[] aList;
+            this->aList = new objPos[list.arrayCapacity]; // allocate a different amount of memory for different array sizes
+
+            for (int i = 0; i < list.listSize; i++) {
+                this->aList[i] = list.aList[i];
+            }
+        } 
+        else { // if other arrayList is empty
+            this->aList = nullptr; 
         }
 	}
 	return *this;
@@ -59,84 +64,56 @@ int objPosArrayList::getSize() const
 
 void objPosArrayList::insertHead(objPos thisPos)
 {
-    if (arrayCapacity <= listSize){
-        arrayCapacity += ARRAY_MAX_CAP;
-        objPos* newList = new objPos[arrayCapacity];
-        for (int i = 0; i<listSize; i++){
-            newList[i] = aList[i];
-        }
-        delete[] aList;
-        objPos* aList = new objPos[arrayCapacity];
-        aList = newList;
-        delete[] newList;
+
+    if (listSize >= arrayCapacity){
+        printf("INSERT HEAD");
+        return;
     }
-    for (int i = listSize -1; i >=0; i--){
-            aList[i+1] = aList[i];
-        }
-    printf("Adding element [%d] (x:%d, y:%d)\n", 0, aList[0].pos->x, aList[0].pos->y);
-    aList[0] = thisPos;
+
+
+    for (int i = listSize; i >0; i--){
+            aList[i] = aList[i-1]; // Shift every element in the list back one spot
+
+    }                              // The first element is in index [0] and [1] after this
+
+    aList[0] = thisPos; // Index [0] gets overwritten with new element
     listSize++;
 
 
-     printf("List: [");
-    for (int i = 0; i<listSize; i++){
-        printf("(%d, %d, '%c'), ", aList[i].pos->x, aList[i].pos->y, aList[i].symbol);
-    }
-    printf("]\n");
+
 }
 
 void objPosArrayList::insertTail(objPos thisPos)
 {
-    
-    if (arrayCapacity <= listSize){
-        arrayCapacity += ARRAY_MAX_CAP;
-        objPos* newList = new objPos[arrayCapacity];
-        for (int i = 0; i<listSize; i++){
-            newList[i] = aList[i];
-        }
-        delete[] aList;
-        objPos* aList = new objPos[arrayCapacity];
-        aList = newList;
-        delete[] newList;
+
+    if (listSize >= arrayCapacity){
+        printf("Insert Tail");
+        return;
     }
 
-    printf("Adding element [%d] (x:%d, y:%d)\n", listSize, aList[listSize].pos->x, aList[listSize].pos->y);
     aList[listSize] = thisPos;
     listSize++;
-    
-    printf("List: [");
-    for (int i = 0; i<listSize; i++){
-        printf("(%d, %d, '%c'), ", aList[i].pos->x, aList[i].pos->y, aList[i].symbol);
-    }
-    printf("]\n");
 }
 
 void objPosArrayList::removeHead()
 {
-    for (int i = 0; i <listSize-1; i++){
-            aList[i] = aList[i+1];
+    if (listSize > 0){
+        for (int i = 0; i <listSize-1; i++){
+            aList[i] = aList[i+1]; // Every element gets shifted forward one index
+                                   
+        }
+                                   // Element at head position is overwritten, element at tail is duplicated
+
+        listSize--; // We don't have to delete the duplicated tail element
+                    // We just shorten the length of the list and the program ignores the second one
     }
-    listSize--;
-    printf("Deleting element [%d] (x:%d, y:%d)\n", listSize, aList[listSize].pos->x, aList[listSize].pos->y);
-    delete &aList[listSize];
-    printf("List: [");
-    for (int i = 0; i<listSize; i++){
-        printf("(%d, %d, '%c'), ", aList[i].pos->x, aList[i].pos->y, aList[i].symbol);
-    }
-    printf("]\n");
 }
 
 void objPosArrayList::removeTail()
 {
-    listSize--;
-    printf("Deleting element [%d] (x:%d, y:%d)\n", listSize, aList[listSize].pos->x, aList[listSize].pos->y);
-    delete &aList[listSize];
-
-    printf("List: [");
-    for (int i = 0; i<listSize; i++){
-        printf("(%d, %d, '%c'), ", aList[i].pos->x, aList[i].pos->y, aList[i].symbol);
+    if (listSize > 0){
+        listSize--;
     }
-    printf("]\n");
 }
 
 objPos objPosArrayList::getHeadElement() const
@@ -151,8 +128,11 @@ objPos objPosArrayList::getTailElement() const
 
 objPos objPosArrayList::getElement(int index) const
 {
-    return aList[index];
-    /// WATCH VIDEO, HANDLE EXCEPTIONS
+    
+    if (index >= listSize || index < 0){
+        // throw exception
+    }
+
     return aList[index]; //handling outofbounds (according to DR.chen's video)
 }
 
