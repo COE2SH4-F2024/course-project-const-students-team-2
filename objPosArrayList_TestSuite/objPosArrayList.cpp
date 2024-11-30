@@ -73,8 +73,9 @@ void objPosArrayList::insertHead(objPos thisPos)
     for (int i = listSize -1; i >=0; i--){
             aList[i+1] = aList[i];
         }
-    printf("Adding element [%d] (x:%d, y:%d)\n", 0, aList[0].pos->x, aList[0].pos->y);
+    
     aList[0] = thisPos;
+    printf("Adding element [%d] (x:%d, y:%d)\n", 0, aList[0].pos->x, aList[0].pos->y);
     listSize++;
 
 
@@ -151,7 +152,7 @@ objPos objPosArrayList::getTailElement() const
 
 objPos objPosArrayList::getElement(int index) const
 {
-    return aList[index];
+    //return aList[index];
     /// WATCH VIDEO, HANDLE EXCEPTIONS
     return aList[index]; //handling outofbounds (according to DR.chen's video)
 }

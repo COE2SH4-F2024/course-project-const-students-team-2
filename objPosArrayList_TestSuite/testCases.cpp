@@ -138,6 +138,7 @@ void testInsertHead_5Element()
 
 	// Then, check the head element is the unique element
 	currentPos = thisList.getHeadElement();
+	
 	actualCheck = headPos.isPosEqual(&currentPos);
 
 
