@@ -3,9 +3,6 @@
 Player::Player(){
     GameMechs gm = GameMechs();
     mainGameMechsRef = &gm;
-    playerPosList = new objPosArrayList();
-
-    objPos headPos(mainGameMechsRef->getBoardSizeX()/2, mainGameMechsRef->getBoardSizeY()/2, '@');
     myDir = STOP;
 
     playerPosList->insertHead(headPos);
@@ -32,11 +29,7 @@ Player::Player(const Player &p){
     
     mainGameMechsRef = p.mainGameMechsRef;
     myDir = p.myDir;
-
-    playerPosList = new objPosArrayList();
-    for (int i = 0; i<p.playerPosList->getSize(); i++){
-        playerPosList->insertTail(p.getPlayerPos()->getElement(i));
-    }
+    playerPos.setObjPos(p.playerPos);
 }
 
 Player& Player::operator= (const Player &p)
@@ -46,10 +39,7 @@ Player& Player::operator= (const Player &p)
         
         this->mainGameMechsRef = p.mainGameMechsRef;
         this->myDir = p.myDir;
-        this->playerPosList = p.playerPosList;
-        for (int i = 0; i<p.playerPosList->getSize(); i++){
-            playerPosList->insertTail(p.getPlayerPos()->getElement(i));
-        }
+        this->playerPos.setObjPos(p.playerPos);
 	}
 	return *this;
 }
@@ -57,14 +47,15 @@ Player& Player::operator= (const Player &p)
 Player::~Player()
 {
     // delete any heap members here
-    delete playerPosList;
+
+
 
 }
 
-objPosArrayList* Player::getPlayerPos() const
+objPos Player::getPlayerPos() const
 {
     // return the reference to the playerPos arrray list
-    return playerPosList;
+    return playerPos;
 }
 
 void Player::updatePlayerDir()
@@ -73,44 +64,28 @@ void Player::updatePlayerDir()
     char input = mainGameMechsRef->getInput();
 
     if (input >= 'a' && input <= 'z'){
-        input -= 32; // if W A S D are lowercase, capitalize them
+        input -= 32;
     }
 
-    switch (input){
-
-        case 'W':
-            if (myDir != DOWN){
-                myDir = UP;
-            }
-            break;
-
-         case 'A':
-            if (myDir != RIGHT){
-                myDir = LEFT;
-            }
-            break;
-
-         case 'S':
-            if (myDir != UP){
-                myDir = DOWN;
-            }
-            break;
-
-         case 'D':
-            if (myDir != LEFT){
-                myDir = RIGHT;
-            }
-            break;
-
-        default:
-            break;
+    if (input == 'W' && myDir != DOWN){
+        myDir = UP;
     }
-
+    else if (input == 'A' && myDir != RIGHT){
+        myDir = LEFT;
+    }
+    else if (input == 'S' && myDir != UP){
+        myDir = DOWN;
+    }
+    else if (input == 'D' && myDir != LEFT){
+        myDir = RIGHT;
+    }
+    else if (input == ' '){
+        mainGameMechsRef->setExitTrue();
+    }
 }
 
 void Player::movePlayer()
 {
-    updatePlayerDir();
     // PPA3 Finite State Machine logic
     // I3: create a temp objPos to calculate the new head psoition
         // probably should get the head element of the player position list as a good starting point
@@ -120,9 +95,6 @@ void Player::movePlayer()
     int headY = temp.pos->y;
 
     switch (myDir){
-
-        // Calculate new head position using the temp objpos
-
         case UP:
 
             if (headY > 1){
@@ -132,7 +104,6 @@ void Player::movePlayer()
                 temp.setObjPos(headX, mainGameMechsRef->getBoardSizeY()-2, '@');
             }
             break;
-
         case DOWN:
             if (headY < mainGameMechsRef->getBoardSizeY()-2){
                 temp.setObjPos(headX, headY+1, '@');

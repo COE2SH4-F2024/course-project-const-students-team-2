@@ -64,19 +64,22 @@ int objPosArrayList::getSize() const
 
 void objPosArrayList::insertHead(objPos thisPos)
 {
-
-    if (listSize >= arrayCapacity){
-        printf("INSERT HEAD");
-        return;
+    if (arrayCapacity <= listSize){
+        arrayCapacity += ARRAY_MAX_CAP;
+        objPos* newList = new objPos[arrayCapacity];
+        for (int i = 0; i<listSize; i++){
+            newList[i] = aList[i];
+        }
+        delete[] aList;
+        objPos* aList = new objPos[arrayCapacity];
+        aList = newList;
+        delete[] newList;
     }
-
-
-    for (int i = listSize; i >0; i--){
-            aList[i] = aList[i-1]; // Shift every element in the list back one spot
-
-    }                              // The first element is in index [0] and [1] after this
-
-    aList[0] = thisPos; // Index [0] gets overwritten with new element
+    for (int i = listSize -1; i >=0; i--){
+            aList[i+1] = aList[i];
+        }
+    printf("Adding element [%d] (x:%d, y:%d)\n", 0, aList[0].pos->x, aList[0].pos->y);
+    aList[0] = thisPos;
     listSize++;
 
 
@@ -128,11 +131,8 @@ objPos objPosArrayList::getTailElement() const
 
 objPos objPosArrayList::getElement(int index) const
 {
-    
-    if (index >= listSize || index < 0){
-        // throw exception
-    }
-
+    return aList[index];
+    /// WATCH VIDEO, HANDLE EXCEPTIONS
     return aList[index]; //handling outofbounds (according to DR.chen's video)
 }
 
