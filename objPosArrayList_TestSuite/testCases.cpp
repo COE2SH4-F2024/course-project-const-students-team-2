@@ -116,8 +116,8 @@ void testInsertHead_5Element()
 	bool result = true; // true;	
 
 	objPos currentPos;
-	objPos bodyPos(2, 5, 'a');  
-	objPos headPos(3, 3, 'm');
+	objPos bodyPos(1, 1, 'b'); 
+	objPos headPos(5, 5, 'h');
 
 	// Insert 4 body elements, then 1 unique head element
 	objPosArrayList thisList;
@@ -157,6 +157,7 @@ void testInsertHead_5Element()
 	// Finally, check the tail element is the body element
 	currentPos = thisList.getTailElement();
 	actualCheck = bodyPos.isPosEqual(&currentPos);
+
 
 	result &= assert_equal(expectedCheck, actualCheck);
 
@@ -221,8 +222,8 @@ void testInsertTail_5Element()
 	bool result = true; // true;
 
 	objPos currentPos;
-	objPos bodyPos(2, 5, 'a');  
-	objPos tailPos(3, 3, 'm');
+	objPos bodyPos(1, 1, 'b'); 
+	objPos tailPos(5, 5, 't');
 
 	// Insert 4 body elements, then 1 unique head element
 	objPosArrayList thisList;
@@ -244,7 +245,6 @@ void testInsertTail_5Element()
 	// Then, check the head element is the common body element
 	currentPos = thisList.getHeadElement();
 	actualCheck = bodyPos.isPosEqual(&currentPos);
-	//printf("Actual (x:%d, y:%d)\n", currentPos.pos->x, currentPos.pos->y);
 
 	result &= assert_equal(expectedCheck, actualCheck);
 
@@ -254,7 +254,6 @@ void testInsertTail_5Element()
 		currentPos = thisList.getElement(i);
 		actualCheck = bodyPos.isPosEqual(&currentPos);
 
-		//printf("Actual (x:%d, y:%d)\n", currentPos.pos->x, currentPos.pos->y);
 
 		result &= assert_equal(expectedCheck, actualCheck);	
 	}
@@ -262,7 +261,8 @@ void testInsertTail_5Element()
 	// Finally, check the tail element is the body element
 	currentPos = thisList.getTailElement();
 	actualCheck = tailPos.isPosEqual(&currentPos);
-	//printf("Actual (x:%d, y:%d)\n", currentPos.pos->x, currentPos.pos->y);
+
+	
 
 	result &= assert_equal(expectedCheck, actualCheck);
 
@@ -303,8 +303,8 @@ void testRemoveHead_5Element()
 	bool result = true; // true;
 
 	objPos currentPos;
-	objPos bodyPos(2, 5, 'a');  
-	objPos headPos(3, 3, 'm');
+	objPos bodyPos(1, 1, 'b'); 
+	objPos headPos(5, 5, 'h');
 
 	// Insert 4 body elements, then 1 unique head element
 	objPosArrayList thisList;
@@ -378,8 +378,8 @@ void testRemoveTail_5Element()
 	bool result = true; // true;
 
 	objPos currentPos;
-	objPos bodyPos(2, 5, 'a');  
-	objPos tailPos(3, 3, 'm');
+	objPos bodyPos(1, 1, 'b');  
+	objPos tailPos(5, 5, 't');
 
 	// Insert 4 body elements, then 1 unique head element
 	objPosArrayList thisList;
@@ -403,7 +403,6 @@ void testRemoveTail_5Element()
 	// Then, check the tail element removed
 	currentPos = thisList.getTailElement();
 	actualCheck = bodyPos.isPosEqual(&currentPos);
-	//printf("Actual (x:%d, y:%d)\n", currentPos.pos->x, currentPos.pos->y);
 
 	result &= assert_equal(expectedCheck, actualCheck);
 
@@ -412,7 +411,6 @@ void testRemoveTail_5Element()
 	{
 		currentPos = thisList.getElement(i);
 		actualCheck = bodyPos.isPosEqual(&currentPos);
-		//printf("Actual (x:%d, y:%d)\n", currentPos.pos->x, currentPos.pos->y);
 
 		result &= assert_equal(expectedCheck, actualCheck);	
 	}
