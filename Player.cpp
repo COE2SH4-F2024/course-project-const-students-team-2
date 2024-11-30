@@ -53,7 +53,7 @@ Player::~Player()
 {
     // delete any heap members here
 
-
+    delete playerPosList;
 
 }
 
