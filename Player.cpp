@@ -33,7 +33,9 @@ Player::Player(const Player &p){
     mainGameMechsRef = p.mainGameMechsRef;
     myDir = p.myDir;
     playerPosList = new objPosArrayList();
-    playerPosList = p.playerPosList;
+    for (int i = 0; i<p.playerPosList->getSize(); i++){
+        playerPosList->insertTail(p.getPlayerPos()->getElement(i));
+    }
 
 }
 
@@ -45,6 +47,9 @@ Player& Player::operator= (const Player &p)
         this->mainGameMechsRef = p.mainGameMechsRef;
         this->myDir = p.myDir;
         this->playerPosList = p.playerPosList;
+        for (int i = 0; i<p.playerPosList->getSize(); i++){
+            playerPosList->insertTail(p.getPlayerPos()->getElement(i));
+        }
 	}
 	return *this;
 }
@@ -69,23 +74,38 @@ void Player::updatePlayerDir()
     char input = mainGameMechsRef->getInput();
 
     if (input >= 'a' && input <= 'z'){
-        input -= 32;
+        input -= 32; // if W A S D are lowercase, capitalize them
     }
 
-    if (input == 'W' && myDir != DOWN){
-        myDir = UP;
-    }
-    else if (input == 'A' && myDir != RIGHT){
-        myDir = LEFT;
-    }
-    else if (input == 'S' && myDir != UP){
-        myDir = DOWN;
-    }
-    else if (input == 'D' && myDir != LEFT){
-        myDir = RIGHT;
-    }
-    else if (input == ' '){
-        mainGameMechsRef->setExitTrue();
+    switch (input){
+
+        case 'W':
+            if (myDir != DOWN){
+                myDir = UP;
+            }
+            break;
+
+         case 'A':
+            if (myDir != RIGHT){
+                myDir = LEFT;
+            }
+            break;
+
+         case 'S':
+            if (myDir != UP){
+                myDir = DOWN;
+            }
+            break;
+
+         case 'D':
+            if (myDir != LEFT){
+                myDir = RIGHT;
+            }
+            break;
+
+        default:
+            break;
+
     }
 }
 
@@ -94,6 +114,8 @@ void Player::movePlayer()
     // PPA3 Finite State Machine logic
     // I3: create a temp objPos to calculate the new head psoition
         // probably should get the head element of the player position list as a good starting point
+
+    updatePlayerDir();
 
     objPos temp = playerPosList->getHeadElement();
     int headX = temp.pos->x;
