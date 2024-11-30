@@ -191,7 +191,6 @@ void DrawScreen(void)
     //===DEBUGGING===
     MacUILib_printf("Score:%d\n", gameMechs->getScore()); //CHECKING FOR SCORE INCREMENTATION
     //MacUILib_printf("Food position:[%d,%d]\n",foodpos->getFoodpos().pos->x, foodpos->getFoodpos().pos->y); //DISPLAY FOOD POSITION
-    MacUiLib_printf("Snake: ")
     //===DEBUGGING===
     
     MacUILib_printf("===End of Game Message===\n");

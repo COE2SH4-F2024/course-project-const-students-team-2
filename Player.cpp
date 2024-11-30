@@ -5,6 +5,9 @@ Player::Player(){
     mainGameMechsRef = &gm;
     myDir = STOP;
 
+    playerPosList = new objPosArrayList();
+    objPos headPos(mainGameMechsRef->getBoardSizeX()/2, mainGameMechsRef->getBoardSizeY()/2, '@');
+
     playerPosList->insertHead(headPos);
     playerPosList->insertHead(headPos);
     playerPosList->insertHead(headPos);
@@ -29,7 +32,9 @@ Player::Player(const Player &p){
     
     mainGameMechsRef = p.mainGameMechsRef;
     myDir = p.myDir;
-    playerPos.setObjPos(p.playerPos);
+    playerPosList = new objPosArrayList();
+    playerPosList = p.playerPosList;
+
 }
 
 Player& Player::operator= (const Player &p)
@@ -39,7 +44,7 @@ Player& Player::operator= (const Player &p)
         
         this->mainGameMechsRef = p.mainGameMechsRef;
         this->myDir = p.myDir;
-        this->playerPos.setObjPos(p.playerPos);
+        this->playerPosList = p.playerPosList;
 	}
 	return *this;
 }
@@ -52,10 +57,10 @@ Player::~Player()
 
 }
 
-objPos Player::getPlayerPos() const
+objPosArrayList* Player::getPlayerPos() const
 {
     // return the reference to the playerPos arrray list
-    return playerPos;
+    return playerPosList;
 }
 
 void Player::updatePlayerDir()
