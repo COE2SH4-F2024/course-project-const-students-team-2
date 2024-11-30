@@ -109,49 +109,49 @@ void Player::movePlayer()
     // PPA3 Finite State Machine logic
     // I3: create a temp objPos to calculate the new head psoition
         // probably should get the head element of the player position list as a good starting point
-    // switch (myDir){
+    switch (myDir){
 
-    //     // Calculate new head position using the temp objpos
+        // Calculate new head position using the temp objpos
 
-    //     case UP:
-    //         if (playerPos.pos->y > 1){
-    //             playerPos.pos->y --;
-    //         }
-    //         else{
-    //             playerPos.pos->y = mainGameMechsRef->getBoardSizeY()-2;
-    //         }
-    //         break;
+        case UP:
+            if (playerPos.pos->y > 1){
+                playerPos.pos->y --;
+            }
+            else{
+                playerPos.pos->y = mainGameMechsRef->getBoardSizeY()-2;
+            }
+            break;
 
-    //     case DOWN:
-    //         if (playerPos.pos->y < mainGameMechsRef->getBoardSizeY()-2){
-    //             playerPos.pos->y ++;
-    //         }
-    //         else{
-    //             playerPos.pos->y = 1;
-    //         }
-    //         break;
+        case DOWN:
+            if (playerPos.pos->y < mainGameMechsRef->getBoardSizeY()-2){
+                playerPos.pos->y ++;
+            }
+            else{
+                playerPos.pos->y = 1;
+            }
+            break;
 
-    //     case LEFT:
-    //         if (playerPos.pos->x > 1){
-    //             playerPos.pos->x--;
-    //         }
-    //         else{
-    //             playerPos.pos->x = mainGameMechsRef->getBoardSizeX()-2;
-    //         }
-    //         break;
+         case LEFT:
+             if (playerPos.pos->x > 1){
+                 playerPos.pos->x--;
+             }
+             else{
+                 playerPos.pos->x = mainGameMechsRef->getBoardSizeX()-2;
+             }
+             break;
 
-    //     case RIGHT:
-    //         if (playerPos.pos->x < mainGameMechsRef->getBoardSizeX()-2){
-    //             playerPos.pos->x ++;
-    //         }
-    //         else{
-    //             playerPos.pos->x = 1;
-    //         }
-    //         break;
+         case RIGHT:
+             if (playerPos.pos->x < mainGameMechsRef->getBoardSizeX()-2){
+                 playerPos.pos->x ++;
+             }
+             else{
+                 playerPos.pos->x = 1;
+             }
+             break;
 
-    //     default:
-    //         break;
-    // }
+         default:
+             break;
+    }
     // Insert temp objPos to head of the list
 
     // Iter 3 (later) check if new temp object position overlaps food position (get it from gameMechs)
