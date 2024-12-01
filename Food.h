@@ -12,16 +12,19 @@ using namespace std;
 class Food
 {
     private:
-        objPos foodPos;        
+        //objPos foodPos;
+        objPosArrayList* foodBucket;        
 
     public:
         
         Food(); 
         ~Food(); 
+        Food(const Food &f);
+        Food& operator= (const Food &f);
 
     
-        void generateFood(objPos blockOff);
-        objPos getFoodpos() const;         
+        void generateFood(objPosArrayList* blockOff);
+        objPosArrayList* getFoodpos() const;         
         
         
 };

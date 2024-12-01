@@ -3,7 +3,7 @@
 #include "objPos.h"
 #include "Player.h"
 #include "GameMechs.h"
-//#include "Food.h"
+#include "Food.h"
 
 using namespace std;
 
@@ -84,7 +84,6 @@ void RunLogic(void)
     }
     else
     {
-        //player->updatePlayerDir(); Put inside movePlayer function
         player->movePlayer();
         //player->checkFoodconsumption();      
         
@@ -93,8 +92,6 @@ void RunLogic(void)
     }
     
     
-    // player->updatePlayerDir();
-    // player->movePlayer();
 
 }
 
@@ -114,7 +111,7 @@ void DrawScreen(void)
     int boardSizeX = gameMechs->getBoardSizeX(); // Board sizes are called from gameMechs
     int boardSizeY = gameMechs->getBoardSizeY();
 
-    bool drewSnakeSegment;
+    bool drewSnakeSegment, drewFood;
 
     MacUILib_clearScreen();   
 
@@ -128,6 +125,7 @@ void DrawScreen(void)
         for (column = 0; column <boardSizeX; column++)
         {
             drewSnakeSegment = false;
+            drewFood = false;
 
             // iterate through the playerpos array list to print all segments out
 
@@ -138,14 +136,27 @@ void DrawScreen(void)
                     drewSnakeSegment = true;
                     break;
                 }
-
-                // check if the current segment x, y, pos matches the coordinate, if yes print the symbol
-
-                // watch out!! we need to skip the if else block below if we have printed something in the for loop
             }
+
             if (drewSnakeSegment){
                 continue;
             }
+
+            for (int k = 0; k<5; k++){
+                objPos foodPos = objPos(food->getFoodpos()->getElement(k));
+                if (row == foodPos.pos->y && column == foodPos.pos->x){
+                    MacUILib_printf("%c", foodPos.getSymbol());
+                    drewFood = true;
+                    break;
+                }
+            }
+
+            if (drewFood){
+                continue;
+            }
+
+
+            
             // at the end of the for loop. do something to determine whether to continue with the if else of move on to next iteration
 
             if (column == 0){
