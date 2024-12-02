@@ -63,15 +63,6 @@ void GetInput(void)
 {
     
     gameMechs->getInput();
-    //DEBUGGING CHANGING RANDOM ON THE FLY WITH DEBUG-KEY 
-    if (gameMechs->getInput() == 'n')
-    {
-        // !!!!
-        // Cycle through all snake segments and make sure food isn't there
-        //food->generateFood(player->getPlayerPos());
-        gameMechs->clearInput();
-        
-    }
 }
 
 void RunLogic(void)
@@ -84,10 +75,7 @@ void RunLogic(void)
     }
     else
     {
-        player->movePlayer();
-        //player->checkFoodconsumption();      
-        
-        
+        player->movePlayer();  
         
     }
     
@@ -101,12 +89,6 @@ void DrawScreen(void)
 
     objPosArrayList * playerPos = player->getPlayerPos();
     int playerSize = playerPos->getSize();
-
-    // int playerXPos = player->getPlayerPos().pos->x;
-    // int playerYPos = player->getPlayerPos().pos->y;
-
-    //int foodXpos = food->getFoodpos().pos->x;
-    //int foodYpos = food ->getFoodpos().pos->y;
 
     int boardSizeX = gameMechs->getBoardSizeX(); // Board sizes are called from gameMechs
     int boardSizeY = gameMechs->getBoardSizeY();
@@ -127,7 +109,7 @@ void DrawScreen(void)
             drewSnakeSegment = false;
             drewFood = false;
 
-            // iterate through the playerpos array list to print all segments out
+            // iterate through the playerpos array list to print all snake segments out
 
             for (int k = 0; k<playerSize; k++){
                 objPos thisSeg = objPos(playerPos->getElement(k));
@@ -166,15 +148,6 @@ void DrawScreen(void)
             {
                 MacUILib_printf("#\n"); // Right border
             }
-            // else if (playerXPos == column && playerYPos == row)
-            // {
-            //     MacUILib_printf("%c", player->getPlayerPos().getSymbol()); // Prints player symbol
-            // }
-            // else if (column == foodXpos && row == foodYpos)
-            // {
-            //     MacUILib_printf("%c", food->getFoodpos().getSymbol()); //food symbol
-            // }
-            
            else{
                 MacUILib_printf(" "); // If nothing occupies that position print a blank space
            }
@@ -185,26 +158,28 @@ void DrawScreen(void)
     }
     MacUILib_printf("\n");
 
-    MacUILib_printf("Input:%c   ASCII:%d\n", gameMechs->getInput(), gameMechs->getInput());
-    
-    //===DEBUGGING===
-    MacUILib_printf("Score:%d\n", gameMechs->getScore()); //CHECKING FOR SCORE INCREMENTATION
+    MacUILib_printf("Score:%d\n", gameMechs->getScore()); 
     MacUILib_printf("Snake size: %d\n", player->getPlayerPos()->getSize());
-    for (int i = 0; i<player->getPlayerPos()->getSize(); i++){
-        MacUILib_printf("Snake segment [%d]: (%d, %d, %c)\n",i,  player->getPlayerPos()->getElement(i).pos->x, player->getPlayerPos()->getElement(i).pos->y, player->getPlayerPos()->getElement(i).symbol);
-    }
+    
+    //===DEBUGGING===
+    //MacUILib_printf("Input:%c   ASCII:%d\n", gameMechs->getInput(), gameMechs->getInput());
+    
+    
+    // for (int i = 0; i<player->getPlayerPos()->getSize(); i++){
+    //     MacUILib_printf("Snake segment [%d]: (%d, %d, %c)\n",i,  player->getPlayerPos()->getElement(i).pos->x, player->getPlayerPos()->getElement(i).pos->y, player->getPlayerPos()->getElement(i).symbol);
+    // }
 
-    for (int i = 0; i<food->getFoodpos()->getSize(); i++){
-        MacUILib_printf("Food position:[%d,%d]\n",food->getFoodpos()->getElement(i).pos->x, food->getFoodpos()->getElement(i).pos->y); //DISPLAY FOOD POSITION
-    }
+    // for (int i = 0; i<food->getFoodpos()->getSize(); i++){
+    //     MacUILib_printf("Food position:[%d,%d]\n",food->getFoodpos()->getElement(i).pos->x, food->getFoodpos()->getElement(i).pos->y); //DISPLAY FOOD POSITION
+    // }
     
     //===DEBUGGING===
     
-    MacUILib_printf("===End of Game Message===\n");
+    //MacUILib_printf("===End of Game Message===\n");
 
     if (gameMechs->getLoseFlagStatus()==true)
     {
-        MacUILib_printf("Sorry you have lost game\n");
+        MacUILib_printf("Sorry you have lost the game \n");
         gameMechs->setExitTrue();
     }
     else
@@ -227,10 +202,8 @@ void LoopDelay(void)
 
 void CleanUp(void)
 {
-    //MacUILib_clearScreen();  
-    // Idk if we're supposed to clear the screen here
 
-    delete gameMechs; //deleting gamemechs 
+    delete gameMechs; 
     delete player;
     delete food;
 

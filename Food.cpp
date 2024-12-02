@@ -17,7 +17,7 @@ Food:: Food()
 
 Food:: ~Food()
 {
-    //deconstructor
+    //destructor
     delete foodBucket;
 }
 
