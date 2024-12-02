@@ -25,7 +25,7 @@ class GameMechs
     public:
         GameMechs();
         GameMechs(int boardX, int boardY);
-        ~GameMechs(); // is this one needed at all? Why or why not?
+        ~GameMechs(); // is this one needed at all? Why or why not: Following rule of 4
         GameMechs(const GameMechs &game);
         GameMechs& operator= (const GameMechs &game);
         
@@ -44,7 +44,7 @@ class GameMechs
         int getScore() const;
         void incrementScore();
         
-        // More methods should be added here
+        
 };
 
 #endif
