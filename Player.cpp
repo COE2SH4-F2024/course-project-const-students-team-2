@@ -13,8 +13,6 @@ Player::Player(){
     objPos headPos(mainGameMechsRef->getBoardSizeX()/2, mainGameMechsRef->getBoardSizeY()/2, '@');
 
     playerPosList->insertHead(headPos);
-    // playerPosList->insertHead(headPos);
-    // playerPosList->insertHead(headPos);
     
     
     
@@ -28,10 +26,7 @@ Player::Player(GameMechs* thisGMRef, Food* thisFood)
 
     objPos headPos(mainGameMechsRef->getBoardSizeX()/2, mainGameMechsRef->getBoardSizeY()/2, '@');
     playerPosList->insertHead(headPos);
-    // playerPosList->insertHead(headPos);
-    // playerPosList->insertHead(headPos);
 
-    // more actions to be included
     
 }
 
@@ -81,8 +76,7 @@ objPosArrayList* Player::getPlayerPos() const
 }
 
 void Player::updatePlayerDir()
-{
-        // PPA3 input processing logic      
+{  
     char input = mainGameMechsRef->getInput();
 
     if (input >= 'a' && input <= 'z'){
@@ -123,20 +117,12 @@ void Player::updatePlayerDir()
 
 void Player::movePlayer()
 {
-    // PPA3 Finite State Machine logic
-    // I3: create a temp objPos to calculate the new head psoition
-        // probably should get the head element of the player position list as a good starting point
 
     updatePlayerDir();
 
     nextHead = objPos(playerPosList->getHeadElement());
     int headX = nextHead.pos->x;
     int headY = nextHead.pos->y;
-    
-   
-    // int foodX = food.getFoodpos().pos->x;
-    // int foodY = food.getFoodpos().pos->y;
-
     
 
     switch (myDir){
@@ -200,39 +186,40 @@ void Player::movePlayer()
 
     increasePlayerLength();
 
-    // Checking if the snake's head collided with any food
 
-    bool ateFood = false;
-
-    for (int i = 0; i<5; i++){
-         if (mainFood->getFoodpos()->getElement(i).isPosEqual(&nextHead)){
-            ateFood = true;
-            mainGameMechsRef->incrementScore();
-         }
-    }
-    
-
-    
-
-    if (ateFood){
+    if (checkFoodConsumption() == true){
         mainFood->generateFood(playerPosList);
     }
     else{
-        playerPosList->removeTail(); // only removing the last position if no food was
+        playerPosList->removeTail(); 
     }
-   
-    // use isPosEqual() from objPos class
-    // If overlapped, food consumed, don't remove snake tail
-    // Increase score
 }
 
 // More methods to be added
 bool Player::checkFoodConsumption()
 {
-    
+    bool result = false;
+    for (int i = 0; i<5; i++){
+         if (mainFood->getFoodpos()->getElement(i).isPosEqual(&nextHead)){
+
+            if (mainFood->getFoodpos()->getElement(i).symbol == '!'){ // special food
+                for (int j = 0; j<10; j++){
+                    mainGameMechsRef->incrementScore(); // 10 points
+                    
+                }
+                playerPosList->removeTail(); // doesn't increase snake size
+                
+            }  
+            else{
+                mainGameMechsRef->incrementScore(); // 1 point for normal food
+            }
+            return true;
+            
+         }
+    }
+    return result;
 }
 
-void Player::increasePlayerLength()
-    {
-playerPosList->insertHead(nextHead); // Inserting new head
+void Player::increasePlayerLength(){
+    playerPosList->insertHead(nextHead); // Inserting new head
 }

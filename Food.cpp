@@ -11,7 +11,7 @@ Food:: Food()
     foodBucket->insertHead(foodPos);
     foodBucket->insertHead(foodPos);
 
-    objPos specialPos = objPos(10, 12, '!'); // special food
+    objPos specialPos = objPos(10, 12, '!'); // special food ( scores 10 points, doesn't increase snake length)
     foodBucket->insertHead(specialPos);
 }
 
@@ -50,11 +50,9 @@ void Food::generateFood(objPosArrayList* blockOff)
     srand(time(NULL));    
 
     
-    int boardx = 30; 
+    int boardx = 30; // dimensions of game board
     int boardy = 15; 
 
-    
-    
     bool freeSpace;
 
     objPos temp = objPos();
