@@ -53,11 +53,7 @@ void Food::generateFood(objPosArrayList* blockOff)
     int boardx = 30; 
     int boardy = 15; 
 
-    foodBucket->removeHead(); // deleting all the old food in the bucket
-    foodBucket->removeHead();
-    foodBucket->removeHead();
-    foodBucket->removeHead();
-    foodBucket->removeHead();
+    
     
     bool freeSpace;
 
@@ -101,7 +97,8 @@ void Food::generateFood(objPosArrayList* blockOff)
             }
             
         }
-        foodBucket->insertTail(temp); // adding food to bucket if generated successfully
+        foodBucket->insertHead(temp); // adding food to bucket if generated successfully
+        foodBucket->removeTail();
     }
     
     

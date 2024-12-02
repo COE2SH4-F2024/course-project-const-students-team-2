@@ -13,7 +13,7 @@ using namespace std;
 
 Player* player;
 GameMechs* gameMechs;
-Food* foodpos; 
+Food* food; 
 
 
 
@@ -53,9 +53,9 @@ void Initialize(void)
     
 
     gameMechs = new GameMechs(); //creating gamemechs on the heap
-    player = new Player(gameMechs);
-    foodpos = new Food();
-    foodpos->generateFood(player->getPlayerPos()->getHeadElement());
+    food = new Food();
+    player = new Player(gameMechs, food);
+    food->generateFood(player->getPlayerPos());
     
 }
 
@@ -68,7 +68,7 @@ void GetInput(void)
     {
         // !!!!
         // Cycle through all snake segments and make sure food isn't there
-        foodpos->generateFood(player->getPlayerPos()->getHeadElement());
+        //food->generateFood(player->getPlayerPos());
         gameMechs->clearInput();
         
     }
@@ -105,8 +105,8 @@ void DrawScreen(void)
     // int playerXPos = player->getPlayerPos().pos->x;
     // int playerYPos = player->getPlayerPos().pos->y;
 
-    int foodXpos = foodpos->getFoodpos().pos->x;
-    int foodYpos = foodpos ->getFoodpos().pos->y;
+    //int foodXpos = food->getFoodpos().pos->x;
+    //int foodYpos = food ->getFoodpos().pos->y;
 
     int boardSizeX = gameMechs->getBoardSizeX(); // Board sizes are called from gameMechs
     int boardSizeY = gameMechs->getBoardSizeY();
@@ -170,10 +170,10 @@ void DrawScreen(void)
             // {
             //     MacUILib_printf("%c", player->getPlayerPos().getSymbol()); // Prints player symbol
             // }
-            else if (column == foodXpos && row == foodYpos)
-            {
-                MacUILib_printf("%c", foodpos->getFoodpos().getSymbol()); //food symbol
-            }
+            // else if (column == foodXpos && row == foodYpos)
+            // {
+            //     MacUILib_printf("%c", food->getFoodpos().getSymbol()); //food symbol
+            // }
             
            else{
                 MacUILib_printf(" "); // If nothing occupies that position print a blank space
@@ -189,10 +189,13 @@ void DrawScreen(void)
     
     //===DEBUGGING===
     MacUILib_printf("Score:%d\n", gameMechs->getScore()); //CHECKING FOR SCORE INCREMENTATION
-    MacUILib_printf("Food position:[%d,%d]\n",foodpos->getFoodpos().pos->x, foodpos->getFoodpos().pos->y); //DISPLAY FOOD POSITION
     MacUILib_printf("Snake size: %d\n", player->getPlayerPos()->getSize());
     for (int i = 0; i<player->getPlayerPos()->getSize(); i++){
         MacUILib_printf("Snake segment [%d]: (%d, %d, %c)\n",i,  player->getPlayerPos()->getElement(i).pos->x, player->getPlayerPos()->getElement(i).pos->y, player->getPlayerPos()->getElement(i).symbol);
+    }
+
+    for (int i = 0; i<food->getFoodpos()->getSize(); i++){
+        MacUILib_printf("Food position:[%d,%d]\n",food->getFoodpos()->getElement(i).pos->x, food->getFoodpos()->getElement(i).pos->y); //DISPLAY FOOD POSITION
     }
     
     //===DEBUGGING===
@@ -229,7 +232,7 @@ void CleanUp(void)
 
     delete gameMechs; //deleting gamemechs 
     delete player;
-    delete foodpos;
+    delete food;
 
     MacUILib_uninit();
     

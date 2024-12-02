@@ -6,8 +6,8 @@ Player::Player(){
     myDir = STOP;
 
     Food food = Food();
-    foodpos = &food;
-    //food = Food();
+    mainFood = &food;
+    
 
     playerPosList = new objPosArrayList();
     objPos headPos(mainGameMechsRef->getBoardSizeX()/2, mainGameMechsRef->getBoardSizeY()/2, '@');
@@ -19,11 +19,11 @@ Player::Player(){
     
     
 }
-Player::Player(GameMechs* thisGMRef)
+Player::Player(GameMechs* thisGMRef, Food* thisFood)
 {
     mainGameMechsRef = thisGMRef;
     myDir = STOP;
-    foodpos = foodpos;
+    mainFood = thisFood;
     playerPosList = new objPosArrayList();
 
     objPos headPos(mainGameMechsRef->getBoardSizeX()/2, mainGameMechsRef->getBoardSizeY()/2, '@');
@@ -40,7 +40,7 @@ Player::Player(const Player &p){
     
     mainGameMechsRef = p.mainGameMechsRef;
     myDir = p.myDir;
-    foodpos = p.foodpos;
+    mainFood = p.mainFood;
     playerPosList = new objPosArrayList();
     for (int i = 0; i<p.playerPosList->getSize(); i++){
         playerPosList->insertTail(p.getPlayerPos()->getElement(i));
@@ -55,7 +55,7 @@ Player& Player::operator= (const Player &p)
         
         this->mainGameMechsRef = p.mainGameMechsRef;
         this->myDir = p.myDir;
-        this->foodpos = p.foodpos;
+        this->mainFood = p.mainFood;
         delete playerPosList;
         this->playerPosList = new objPosArrayList();
         this->playerPosList = p.playerPosList;
@@ -129,50 +129,52 @@ void Player::movePlayer()
 
     updatePlayerDir();
 
-    objPos temp = objPos(playerPosList->getHeadElement());
-    int headX = temp.pos->x;
-    int headY = temp.pos->y;
+    nextHead = objPos(playerPosList->getHeadElement());
+    int headX = nextHead.pos->x;
+    int headY = nextHead.pos->y;
     
    
     // int foodX = food.getFoodpos().pos->x;
     // int foodY = food.getFoodpos().pos->y;
+
+    
 
     switch (myDir){
         case UP:
 
             if (headY > 1)
             {
-                temp.setObjPos(headX, headY-1, '@');
+                nextHead.setObjPos(headX, headY-1, '@');
             }
             else
             {
-                temp.setObjPos(headX, mainGameMechsRef->getBoardSizeY()-2, '@');
+                nextHead.setObjPos(headX, mainGameMechsRef->getBoardSizeY()-2, '@');
             }
             break;
         case DOWN:
             if (headY < mainGameMechsRef->getBoardSizeY()-2){
-                temp.setObjPos(headX, headY+1, '@');
+                nextHead.setObjPos(headX, headY+1, '@');
             }
             else{
-                temp.setObjPos(headX, 1, '@');
+                nextHead.setObjPos(headX, 1, '@');
             }
             break;
 
          case LEFT:
              if (headX > 1){
-                temp.setObjPos(headX-1, headY, '@');
+                nextHead.setObjPos(headX-1, headY, '@');
             }
             else{
-                temp.setObjPos(mainGameMechsRef->getBoardSizeX()-2, headY, '@');
+                nextHead.setObjPos(mainGameMechsRef->getBoardSizeX()-2, headY, '@');
             }
              break;
 
          case RIGHT:
              if (headX < mainGameMechsRef->getBoardSizeX()-2){
-                temp.setObjPos(headX+1, headY, '@');
+                nextHead.setObjPos(headX+1, headY, '@');
             }
             else{
-                temp.setObjPos(1, headY, '@');
+                nextHead.setObjPos(1, headY, '@');
             }
              break;
 
@@ -181,51 +183,56 @@ void Player::movePlayer()
     }
 
 
-    // playerPosList->insertHead(temp);
-    // playerPosList->removeTail();
+    // Game over condition
 
-    // Insert temp objPos to head of the list
-    // Iter 3 (later) check if new temp object position overlaps food position (get it from gameMechs)
+    if (myDir != STOP){ // Won't check game over until snake starts moving
+        
+        for (int i = 0; i<playerPosList->getSize()-1; i++){ 
+            // Doesn't need to check the last position because the last position will always disappear
+                // (If the snake is eating food the last snake position is not removed, but the snake can't eat food and collide
+                // with itself on the same space because food doesn't generate on any portion occupied by the snake)
 
-    objPos food = foodpos->getFoodpos();
+            if (playerPosList->getElement(i).isPosEqual(&nextHead)){
+                mainGameMechsRef->setLoseFlag();
+            }
+        }
+    }
+
+    increasePlayerLength();
+
+    // Checking if the snake's head collided with any food
+
+    bool ateFood = false;
+
+    for (int i = 0; i<5; i++){
+         if (mainFood->getFoodpos()->getElement(i).isPosEqual(&nextHead)){
+            ateFood = true;
+            mainGameMechsRef->incrementScore();
+         }
+    }
     
-    if (headX == food.pos->x && headY == food.pos->y)
-    {
-        playerPosList->insertHead(temp);
-        //food.generateFood(*playerPosList);
-        mainGameMechsRef->incrementScore();
+
+    
+
+    if (ateFood){
+        mainFood->generateFood(playerPosList);
     }
-    else
-    {
-        playerPosList->insertHead(temp);
-        playerPosList->removeTail();
+    else{
+        playerPosList->removeTail(); // only removing the last position if no food was
     }
+   
     // use isPosEqual() from objPos class
     // If overlapped, food consumed, don't remove snake tail
     // Increase score
 }
 
 // More methods to be added
-bool Player::checkFoodconsumption()
+bool Player::checkFoodConsumption()
 {
-    // objPos foodpos = food.getFoodpos();
-    // objPos temp = objPos(playerPosList->getHeadElement());
     
-    // if (temp.isPosEqual(&foodpos) == true)
-    // {
-    //     playerPosList->insertHead(temp);
-    //     food.generateFood(temp.getObjPos());
-    //     return true;
-    // }
-    // else
-    // {
-    //     playerPosList->insertHead(temp);
-    //     playerPosList->removeTail();
-        
-    // }
 }
 
 void Player::increasePlayerLength()
-{
-
+    {
+playerPosList->insertHead(nextHead); // Inserting new head
 }
